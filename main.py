@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import akshare as ak
 import json
+import uvicorn
 
 app = FastAPI()
 
@@ -16,7 +17,7 @@ async def connect(code: str):
 
     res = df.to_json(orient="records", force_ascii=False)
 
-    return res
+    return json.loads(res)
 
 
 @app.get("/open")
@@ -115,3 +116,12 @@ async def shishi_many(code: str):
                 return_list.append(value)
 
     return return_list
+
+
+if __name__ == '__main__':
+    uvicorn.run(
+        app='main:app',
+        host="0.0.0.0",
+        port=8083,
+        workers=4,
+        reload=False)
