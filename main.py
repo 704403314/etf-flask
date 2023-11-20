@@ -23,7 +23,6 @@ async def connect(code: str):
 @app.get("/open")
 async def open():
     df = ak.fund_open_fund_rank_em(symbol="全部")
-    print("df:", df)
     res = df.to_json(orient="records", force_ascii=False)
 
     return res
@@ -32,7 +31,6 @@ async def open():
 @app.get("/changnei")
 async def changnei():
     df = ak.fund_exchange_rank_em()
-    print("df:", df)
     res = df.to_json(orient="records", force_ascii=False)
 
     return res
@@ -41,7 +39,6 @@ async def changnei():
 @app.get("/huobi")
 async def huobi():
     df = ak.fund_money_rank_em()
-    print("df:", df)
     res = df.to_json(orient="records", force_ascii=False)
     return res
 
@@ -49,10 +46,17 @@ async def huobi():
 @app.get("/licai")
 async def licai():
     df = ak.fund_lcx_rank_em()
-    print("df:", df)
     res = df.to_json(orient="records", force_ascii=False)
 
     return res
+
+@app.get("/rili")
+async def rili():
+    df = ak.tool_trade_date_hist_sina()
+    # print("df:", df)
+    # res = df.to_json(orient="records", force_ascii=False)
+
+    return df
 
 
 @app.get("/shishi")
@@ -116,6 +120,14 @@ async def shishi_many(code: str):
                 return_list.append(value)
 
     return return_list
+
+
+@app.get("/history/profit")
+async def profit():
+    df = ak.fund_open_fund_rank_em("全部")
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+    return parsed_array
 
 
 if __name__ == '__main__':
