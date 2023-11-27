@@ -146,6 +146,13 @@ async def stock():
     return parsed_array
 
 
+@app.get("/etf/profit")
+async def stock():
+    df = ak.fund_exchange_rank_em()
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+    return parsed_array
+
 
 if __name__ == '__main__':
     uvicorn.run(
