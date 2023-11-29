@@ -154,6 +154,22 @@ async def stock():
     return parsed_array
 
 
+@app.get("/fund/code")
+async def stock():
+    df = ak.fund_name_em()
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+    return parsed_array
+
+
+@app.get("/fund/hk/stock")
+async def stock():
+    df = ak.stock_hk_spot_em()
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+    return parsed_array
+
+
 if __name__ == '__main__':
     uvicorn.run(
         app='main:app',
