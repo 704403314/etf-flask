@@ -170,6 +170,26 @@ async def stock():
     return parsed_array
 
 
+@app.get("/fund/valuation")
+async def fund_valuation():
+    df = ak.fund_value_estimation_em(symbol="全部")
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+
+    return_list = []
+    for item in parsed_array:
+        return_list.append(item)
+
+    internal = ak.fund_value_estimation_em(symbol="场内交易基金")
+    internal_res = internal.to_json(orient="records", force_ascii=False)
+    internal_array = json.loads(internal_res)
+
+    for item in internal_array:
+        return_list.append(item)
+
+    return return_list
+
+
 if __name__ == '__main__':
     uvicorn.run(
         app='main:app',
