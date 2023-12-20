@@ -1,10 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import akshare as ak
 import json
 import uvicorn
+from http import HTTPStatus
+import dashscope
+import settings
+from fastapi.responses import Response
 
 app = FastAPI()
-
+dashscope.api_key=settings.ALI_API_KEY
 
 @app.get("/")
 async def root():
@@ -188,6 +192,26 @@ async def fund_valuation():
         return_list.append(item)
 
     return return_list
+
+
+@app.post("/ai/ali")
+async def call_with_prompt(request: Request):
+    data = await request.json()
+    # messages = [
+    #     {'role': 'user', 'content': data['prompt']}]
+    response = dashscope.Generation.call(
+        model=dashscope.Generation.Models.qwen_turbo,
+        prompt=data['prompt']
+    )
+    # The response status_code is HTTPStatus.OK indicate success,
+    # otherwise indicate request is failed, you can get error code
+    # and message from code and message.
+    # print(response)
+    # return_list = []
+    if response.status_code == HTTPStatus.OK:
+        return Response(content=response.output.text, media_type="text/plain")
+    else:
+        return Response(content="接口请求异常，请稍后再试！", media_type="text/plain")
 
 
 if __name__ == '__main__':
