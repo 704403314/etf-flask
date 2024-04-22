@@ -215,5 +215,5 @@ if __name__ == '__main__':
         app='main:app',
         host="0.0.0.0",
         port=8083,
-        workers=2,
+        workers=1,
         reload=False)
