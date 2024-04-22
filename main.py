@@ -136,7 +136,7 @@ async def profit():
 
 @app.get("/fund/hold")
 async def hold(code: str):
-    df = ak.fund_portfolio_hold_em(symbol=code, date="2023")
+    df = ak.fund_portfolio_hold_em(symbol=code, date="2024")
     res = df.to_json(orient="records", force_ascii=False)
     parsed_array = json.loads(res)
     return parsed_array
@@ -203,11 +203,7 @@ async def call_with_prompt(request: Request):
         model=dashscope.Generation.Models.qwen_turbo,
         prompt=data['prompt']
     )
-    # The response status_code is HTTPStatus.OK indicate success,
-    # otherwise indicate request is failed, you can get error code
-    # and message from code and message.
-    # print(response)
-    # return_list = []
+
     if response.status_code == HTTPStatus.OK:
         return Response(content=response.output.text, media_type="text/plain")
     else:
