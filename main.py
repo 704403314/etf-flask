@@ -136,7 +136,7 @@ async def profit():
 
 @app.get("/fund/hold")
 async def hold(code: str):
-    df = ak.fund_portfolio_hold_em(symbol=code, date="2024")
+    df = ak.fund_portfolio_hold_em(symbol=code, date="2025")
     res = df.to_json(orient="records", force_ascii=False)
     parsed_array = json.loads(res)
     return parsed_array
@@ -209,6 +209,12 @@ async def call_with_prompt(request: Request):
     else:
         return Response(content="接口请求异常，请稍后再试！", media_type="text/plain")
 
+@app.get("/fund/ah/stock")
+async def stock():
+    df = ak.stock_zh_ah_spot_em()
+    res = df.to_json(orient="records", force_ascii=False)
+    parsed_array = json.loads(res)
+    return parsed_array
 
 if __name__ == '__main__':
     uvicorn.run(
